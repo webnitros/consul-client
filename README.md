@@ -1,4 +1,4 @@
-# Consul - сервер и агент
+# Consul and Registrator with ACL server and agent
 
 Для соединения сервера и агента используется механизм авторизации acl.
 
