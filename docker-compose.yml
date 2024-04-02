@@ -50,7 +50,7 @@ services:
                 target: /etc/consul.d/anonymous-policy.hcl
 
     # Registrator
-    registrator_server:
+    registrator:
         image: gliderlabs/registrator:master
         command: -internal consul://consul:8500
         restart: always
