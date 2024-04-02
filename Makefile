@@ -1,14 +1,19 @@
 include ./.env
 export
 
+export TYPE_SERVICE=$(filter-out $@,$(MAKECMDGOALS))
+
+test:
+	@echo "Service: $(TYPE_SERVICE)"
+
 up:
-	docker compose up
+	docker compose --profile $(TYPE_SERVICE) up
 stop:
 	docker compose stop
 down:
-	docker compose down --volumes --remove-orphans
+	docker compose --profile server down --volumes --remove-orphans
 build:
-	docker compose build
+	docker compose --profile server build
 destroy:
 	docker compose down --volumes --remove-orphans
 destroy-all:

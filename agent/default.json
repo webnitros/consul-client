@@ -1,0 +1,18 @@
+{
+  "datacenter": "%%DATACENTER%%",
+  "data_dir": "/tmp/data",
+  "server": false,
+  "ui": true,
+  "enable_script_checks": true,
+  "primary_datacenter": "%%DATACENTER%%",
+  "acl": {
+    "enabled": true,
+    "default_policy": "deny"
+  },
+  "node_name": "%%AGENT_NODE_NAME%%",
+  "log_level": "INFO",
+  "domain": "consul",
+  "acl_token": "%%CONSUL_HTTP_TOKEN%%",
+  "client_addr": "0.0.0.0",
+  "advertise_addr": "%%AGENT_ADVERTISE_ADDR%%"
+}
