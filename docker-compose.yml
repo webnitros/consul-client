@@ -64,6 +64,9 @@ services:
             - consul
         depends_on:
             - consul
+        #depends_on:
+        #    consul:
+        #        condition: service_healthy
 
 volumes:
     consul_data:
