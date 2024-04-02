@@ -63,9 +63,7 @@ services:
         links:
             - consul
         depends_on:
-            consul:
-                condition: service_healthy
-
+            - consul
 
 volumes:
     consul_data:
