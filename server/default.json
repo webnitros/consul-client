@@ -11,7 +11,7 @@
     "default_policy": "deny",
     "enable_token_persistence": true,
     "tokens": {
-      "initial_management": ""
+      "initial_management": "%%CONSUL_HTTP_TOKEN%%"
     }
   },
   "node_name": "consul-server-1",

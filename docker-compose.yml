@@ -9,10 +9,15 @@ services:
             - 8300:8300
             - 8500:8500
             - 8600:53/udp
-        command: consul agent --config-file /etc/consul.d/default.json
+        #command: consul agent --config-file /etc/consul.d/default.json
+        command: [ "sh", "/entry.sh" ]
+        environment:
+            CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
         configs:
+            -   source: entry
+                target: /entry.sh
             -   source: consul_config
-                target: /etc/consul.d/default.json
+                target: /etc/consul.d/default.template
             -   source: agent_config
                 target: /etc/consul.d/agent-policy.hcl
             -   source: anonynous_config
@@ -48,6 +53,8 @@ networks:
         external: false
 
 configs:
+    entry:
+        file: ./entry.sh
     consul_config:
         file: ./server/default.json
     agent_config:
