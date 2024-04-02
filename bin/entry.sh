@@ -1,6 +1,19 @@
 #!/bin/sh
 
-cp /etc/consul.d/default.template /etc/consul.d/default.json
+# TYPE_SERVICE empty
+if [ -z "${TYPE_SERVICE}" ]; then
+  echo "TYPE_SERVICE is empty. 'make up server' or 'make up agent'"
+  exit 1
+fi
+
+
+echo "TYPE_SERVICE: ${TYPE_SERVICE}"
+
+if [ "${TYPE_SERVICE}" = "server" ]; then
+  cp /etc/consul.d/default.server.template /etc/consul.d/default.json
+elif [ "${TYPE_SERVICE}" = "agent" ]; then
+  cp /etc/consul.d/default.agent.template /etc/consul.d/default.json
+fi
 
 sed -i "s/%%CONSUL_HTTP_TOKEN%%/${CONSUL_HTTP_TOKEN}/g" "/etc/consul.d/default.json"
 sed -i "s/%%DATACENTER%%/${DATACENTER}/g" "/etc/consul.d/default.json"
@@ -10,7 +23,6 @@ sed -i "s/%%SERVER_NODE_NAME%%/${SERVER_NODE_NAME}/g" "/etc/consul.d/default.jso
 sed -i "s/%%SERVER_ADVERTISE_ADDR%%/${SERVER_ADVERTISE_ADDR}/g" "/etc/consul.d/default.json"
 sed -i "s/\"%%BOOTSTRAP_EXPECT%%\"/${BOOTSTRAP_EXPECT}/g" "/etc/consul.d/default.json"
 
-echo "TYPE_SERVICE: ${TYPE_SERVICE}"
 
 if [ "${TYPE_SERVICE}" = "server" ]; then
   consul agent --config-file /etc/consul.d/default.json

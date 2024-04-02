@@ -7,13 +7,13 @@ test:
 	@echo "Service: $(TYPE_SERVICE)"
 
 up:
-	docker compose --profile $(TYPE_SERVICE) up -d
+	docker compose up
 stop:
 	docker compose stop
 down:
-	docker compose --profile server down --volumes --remove-orphans
+	docker compose down --volumes --remove-orphans
 build:
-	docker compose --profile server build
+	docker compose server build
 destroy:
 	docker compose down --volumes --remove-orphans
 destroy-all:
