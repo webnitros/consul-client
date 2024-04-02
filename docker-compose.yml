@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+    consul:
+        image: consul:1.15.4
+        ports:
+            - 8301:8301
+            - 8302:8302
+            - 8300:8300
+            - 8500:8500
+            - 8600:53/udp
+        command: consul agent --config-file /etc/consul.d/default.json
+        configs:
+            -   source: consul_config
+                target: /etc/consul.d/default.json
+            -   source: agent_config
+                target: /etc/consul.d/agent-policy.hcl
+            -   source: anonynous_config
+                target: /etc/consul.d/anonymous-policy.hcl
+        networks:
+            - consul
+        healthcheck:
+            test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/agent/checks" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 60s
+    registrator:
+        image: gliderlabs/registrator:master
+        command: -internal consul://consul:8500
+        restart: always
+        depends_on:
+            consul:
+                condition: service_healthy
+        environment:
+            CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock
+        links:
+            - consul
+        networks:
+            - consul
+volumes:
+    consul_data-3:
+
+networks:
+    consul:
+        external: false
+
+configs:
+    consul_config:
+        file: ./server/default.json
+    agent_config:
+        file: ./server/agent-policy.hcl
+    anonynous_config:
+        file: ./server/anonymous-policy.hcl
