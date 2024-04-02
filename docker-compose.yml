@@ -26,6 +26,7 @@ services:
             SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
         volumes:
             - consul_data:/consul/data
+            - consul_config:/consul/config
         networks:
             - consul
         healthcheck:
@@ -71,6 +72,7 @@ services:
 
 volumes:
     consul_data:
+    consul_config:
 
 networks:
     consul:
