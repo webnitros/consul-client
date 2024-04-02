@@ -13,14 +13,18 @@ services:
         command: [ "sh", "/entry.sh" ]
         environment:
             TYPE_SERVICE: "${TYPE_SERVICE}"
-            BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
             CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
-            LEADER_SERVER_IP: "${LEADER_SERVER_IP}"
             DATACENTER: "${DATACENTER}"
-            SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
-            SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
+
+            # Agent
+            JOIN_SERVER_IP: "${JOIN_SERVER_IP}"
             AGENT_NODE_NAME: "${AGENT_NODE_NAME}"
             AGENT_ADVERTISE_ADDR: "${AGENT_ADVERTISE_ADDR}"
+
+            # Server
+            BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
+            SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
+            SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
         networks:
             - consul
         healthcheck:
