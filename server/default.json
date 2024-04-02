@@ -4,7 +4,7 @@
   "server": true,
   "enable_script_checks": true,
   "ui": true,
-  "bootstrap_expect": %%BOOTSTRAP_EXPECT%%,
+  "bootstrap_expect": "%%BOOTSTRAP_EXPECT%%",
   "primary_datacenter": "%%DATACENTER%%",
   "acl": {
     "enabled": true,

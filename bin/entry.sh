@@ -8,7 +8,7 @@ sed -i "s/%%AGENT_NODE_NAME%%/${AGENT_NODE_NAME}/g" "/etc/consul.d/default.json"
 sed -i "s/%%AGENT_ADVERTISE_ADDR%%/${AGENT_ADVERTISE_ADDR}/g" "/etc/consul.d/default.json"
 sed -i "s/%%SERVER_NODE_NAME%%/${SERVER_NODE_NAME}/g" "/etc/consul.d/default.json"
 sed -i "s/%%SERVER_ADVERTISE_ADDR%%/${SERVER_ADVERTISE_ADDR}/g" "/etc/consul.d/default.json"
-sed -i "s/%%BOOTSTRAP_EXPECT%%/${BOOTSTRAP_EXPECT}/g" "/etc/consul.d/default.json"
+sed -i "s/\"%%BOOTSTRAP_EXPECT%%\"/${BOOTSTRAP_EXPECT}/g" "/etc/consul.d/default.json"
 
 echo "TYPE_SERVICE: ${TYPE_SERVICE}"
 

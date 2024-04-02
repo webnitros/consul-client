@@ -8,12 +8,13 @@ cp -f .env.example .env
 
 # Переменные окружения
 
-| Переменная            | Описание                                   | Пример                                                                                                      |
-|-----------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| CONSUL_HTTP_TOKEN     | Токен для доступа к Consul API             | [генератор](https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ) |
-| LEADER_SERVER_IP      | IP-адрес сервера, который является лидером |                                                                                                             |
-| DATACENTER            | Название датацентра                        | test-dc                                                                                                     |
-| SERVER_NODE_NAME      | Имя сервера                                | consul-server-1                                                                                             |
-| SERVER_ADVERTISE_ADDR | IP-адрес сервера                           |                                                                                                             |
-| AGENT_NODE_NAME       | Имя агента                                 | consul-agent-1                                                                                              |
-| AGENT_ADVERTISE_ADDR  | IP-адрес агента                            |                                                                                                             |
+| Переменная             | Описание                                    | Пример                                                                                                      |
+|------------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| CONSUL_HTTP_TOKEN      | Токен для доступа к Consul API              | [генератор](https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ) |
+| LEADER_SERVER_IP       | IP-адрес сервера, который является лидером  |                                                                                                             |
+| DATACENTER             | Название датацентра                         | test-dc                                                                                                     |
+| SERVER_NODE_NAME       | Имя сервера                                 | consul-server-1                                                                                             |
+| SERVER_ADVERTISE_ADDR  | IP-адрес сервера                            |                                                                                                             |
+| AGENT_NODE_NAME        | Имя агента                                  | consul-agent-1                                                                                              |
+| AGENT_ADVERTISE_ADDR   | IP-адрес агента                             |                                                                                                             |
+| BOOTSTRAP_EXPECT       | Количество серверов для выбора лидера       | 3                                                                                                           |

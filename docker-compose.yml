@@ -11,6 +11,7 @@ x-base-consul: &base-consul
     command: [ "sh", "/entry.sh" ]
     environment:
         TYPE_SERVICE: "${TYPE_SERVICE}"
+        BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
         CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
         LEADER_SERVER_IP: "${LEADER_SERVER_IP}"
         DATACENTER: "${DATACENTER}"
