@@ -24,6 +24,8 @@ services:
             BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
             SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
             SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
+        volumes:
+            - consul_data:/consul/data
         networks:
             - consul
         healthcheck:
