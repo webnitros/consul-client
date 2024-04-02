@@ -13,14 +13,11 @@ stop:
 down:
 	docker compose down --volumes --remove-orphans
 build:
-	docker compose server build
+	docker compose build
 destroy:
 	docker compose down --volumes --remove-orphans
 destroy-all:
 	docker compose down --rmi all --volumes --remove-orphans
-remake:
-	@make down
-	@make install
 install:
 	@make build
 	@make up

@@ -11,16 +11,11 @@ services:
             - 8500:8500
             - 8600:53/udp
         command: [ "sh", "/entry.sh" ]
+        env_file:
+            - ./.env
         environment:
             TYPE_SERVICE: "${TYPE_SERVICE}"
-            BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
             CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
-            LEADER_SERVER_IP: "${LEADER_SERVER_IP}"
-            DATACENTER: "${DATACENTER}"
-            SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
-            SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
-            AGENT_NODE_NAME: "${AGENT_NODE_NAME}"
-            AGENT_ADVERTISE_ADDR: "${AGENT_ADVERTISE_ADDR}"
         networks:
             - consul
         healthcheck:
@@ -30,6 +25,8 @@ services:
             retries: 5
             start_period: 60s
         configs:
+            -   source: env_config
+                target: /.env
             -   source: entry
                 target: /entry.sh
             # Config agent
@@ -71,6 +68,8 @@ networks:
         external: false
 
 configs:
+    env_config:
+        file: ./.env
     entry:
         file: ./bin/entry.sh
 
