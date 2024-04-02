@@ -19,16 +19,10 @@ if [ -z "${CONSUL_HTTP_TOKEN}" ]; then
   exit 1
 fi
 
-# if empty DATACENTER
-if [ -z "${DATACENTER}" ]; then
-  echo "DATACENTER is empty. Please set it in .env file"
-  exit 1
-fi
 
 echo "TYPE_SERVICE: ${TYPE_SERVICE}"
 
 sed -i "s/%%CONSUL_HTTP_TOKEN%%/${CONSUL_HTTP_TOKEN}/g" "/etc/consul.d/default.json"
-sed -i "s/%%DATACENTER%%/${DATACENTER}/g" "/etc/consul.d/default.json"
 
 if [ "${TYPE_SERVICE}" = "server" ]; then
 

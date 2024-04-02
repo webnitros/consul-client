@@ -12,7 +12,6 @@ cp -f .env.example .env
 |-----------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | CONSUL_HTTP_TOKEN     | Токен для доступа к Consul API              | [генератор](https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ) |
 | JOIN_SERVER_IP        | IP-адрес сервера, который для присоединения |                                                                                                             |
-| DATACENTER            | Название датацентра                         | test-dc                                                                                                     |
 | SERVER_NODE_NAME      | Имя сервера                                 | consul-server-1                                                                                             |
 | SERVER_ADVERTISE_ADDR | IP-адрес сервера                            |                                                                                                             |
 | AGENT_NODE_NAME       | Имя агента                                  | consul-agent-1                                                                                              |
