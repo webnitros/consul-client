@@ -29,6 +29,7 @@ x-base-consul: &base-consul
 
 x-base-registrator: &base-registrator
     image: gliderlabs/registrator:master
+    command: -internal consul://consul_${TYPE_SERVICE}:8500
     restart: always
     environment:
         CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
@@ -36,6 +37,8 @@ x-base-registrator: &base-registrator
         - /var/run/docker.sock:/tmp/docker.sock
     networks:
         - consul
+    links:
+        - consul_${TYPE_SERVICE}
 
 services:
     # Consul server
@@ -55,9 +58,6 @@ services:
     registrator_server:
         <<: *base-registrator
         profiles: [ server ]
-        command: -internal consul://consul_server:8500
-        links:
-            - consul_server
         depends_on:
             consul_server:
                 condition: service_healthy
@@ -75,8 +75,6 @@ services:
     registrator_agent:
         <<: *base-registrator
         profiles: [ agent ]
-        links:
-            - consul_agent
         depends_on:
             consul_agent:
                 condition: service_healthy

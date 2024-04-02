@@ -2,7 +2,6 @@
   "datacenter": "%%DATACENTER%%",
   "data_dir": "/tmp/data",
   "server": false,
-  "ui": true,
   "enable_script_checks": true,
   "primary_datacenter": "%%DATACENTER%%",
   "acl": {

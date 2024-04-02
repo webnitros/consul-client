@@ -7,7 +7,7 @@ test:
 	@echo "Service: $(TYPE_SERVICE)"
 
 up:
-	docker compose --profile $(TYPE_SERVICE) up
+	docker compose --profile $(TYPE_SERVICE) up -d
 stop:
 	docker compose stop
 down:
