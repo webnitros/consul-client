@@ -10,7 +10,7 @@ cp -f .env.example .env
 
 | Переменная            | Описание                                   | Пример                                                                                                      |
 |-----------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| CONSUL_HTTP_TOKEN     | Токен для доступа к Consul API             | [https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ](генератор) |
+| CONSUL_HTTP_TOKEN     | Токен для доступа к Consul API             | [генератор](https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ) |
 | LEADER_SERVER_IP      | IP-адрес сервера, который является лидером |                                                                                                             |
 | DATACENTER            | Название датацентра                        | test-dc                                                                                                     |
 | SERVER_NODE_NAME      | Имя сервера                                | consul-server-1                                                                                             |
