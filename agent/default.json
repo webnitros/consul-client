@@ -2,7 +2,6 @@
   "datacenter": "test-dc",
   "data_dir": "/tmp/data",
   "server": false,
-  "ui": true,
   "enable_script_checks": true,
   "primary_datacenter": "test-dc",
   "acl": {
