@@ -3,8 +3,7 @@
 echo "Starting Consul... ${TYPE_SERVICE}"
 
 if [ -z "${TYPE_SERVICE}" ]; then
-  echo "TYPE_SERVICE is empty. 'make up server' or 'make up agent'"
-  exit 1
+  TYPE_SERVICE="agent"
 fi
 
 if [ "${TYPE_SERVICE}" = "server" ]; then
@@ -13,19 +12,27 @@ elif [ "${TYPE_SERVICE}" = "agent" ]; then
   cp /etc/consul.d/default.agent.template /etc/consul.d/default.json
 fi
 
-# if empty CONSUL_HTTP_TOKEN
-if [ -z "${CONSUL_HTTP_TOKEN}" ]; then
-  echo "CONSUL_HTTP_TOKEN is empty. Please set it in .env file"
-  exit 1
+# CONSUL_HTTP_TOKEN_FILE not empty
+if [ -n "${CONSUL_HTTP_TOKEN_FILE}" ]; then
+  if [ -f "${CONSUL_HTTP_TOKEN_FILE}" ]; then
+    CONSUL_HTTP_TOKEN=$(cat ${CONSUL_HTTP_TOKEN_FILE})
+  else
+    echo "CONSUL_HTTP_TOKEN_FILE not found"
+    exit 1
+  fi
+else
+  # if empty CONSUL_HTTP_TOKEN
+  if [ -z "${CONSUL_HTTP_TOKEN}" ]; then
+    echo "CONSUL_HTTP_TOKEN is empty. Please set it in .env file"
+    exit 1
+  fi
 fi
-
 
 echo "TYPE_SERVICE: ${TYPE_SERVICE}"
 
 sed -i "s/%%CONSUL_HTTP_TOKEN%%/${CONSUL_HTTP_TOKEN}/g" "/etc/consul.d/default.json"
 
 if [ "${TYPE_SERVICE}" = "server" ]; then
-
 
   # if empty SERVER_NODE_NAME
   if [ -z "${SERVER_NODE_NAME}" ]; then
@@ -49,7 +56,6 @@ if [ "${TYPE_SERVICE}" = "server" ]; then
 
   consul agent --config-file /etc/consul.d/default.json
 elif [ "${TYPE_SERVICE}" = "agent" ]; then
-
 
   # if empty AGENT_NODE_NAME
   if [ -z "${AGENT_NODE_NAME}" ]; then
