@@ -12,6 +12,7 @@ services:
             - 8600:53/udp
         command: [ "sh", "/entry.sh" ]
         environment:
+            SERVICE_TAG: "metrics"
             TYPE_SERVICE: "${TYPE_SERVICE}"
             CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
 
