@@ -6,12 +6,6 @@ if [ -z "${TYPE_SERVICE}" ]; then
   TYPE_SERVICE="agent"
 fi
 
-if [ "${TYPE_SERVICE}" = "server" ]; then
-  cp /etc/consul.d/default.server.template /etc/consul.d/default.json
-elif [ "${TYPE_SERVICE}" = "agent" ]; then
-  cp /etc/consul.d/default.agent.template /etc/consul.d/default.json
-fi
-
 # CONSUL_HTTP_TOKEN_FILE not empty
 if [ -n "${CONSUL_HTTP_TOKEN_FILE}" ]; then
   if [ -f "${CONSUL_HTTP_TOKEN_FILE}" ]; then
@@ -28,7 +22,16 @@ else
   fi
 fi
 
+
 echo "TYPE_SERVICE: ${TYPE_SERVICE}"
+
+
+if [ "${TYPE_SERVICE}" = "server" ]; then
+  cp /etc/consul.d/default.server.template /etc/consul.d/default.json
+elif [ "${TYPE_SERVICE}" = "agent" ]; then
+  cp /etc/consul.d/default.agent.template /etc/consul.d/default.json
+fi
+
 
 sed -i "s/%%CONSUL_HTTP_TOKEN%%/${CONSUL_HTTP_TOKEN}/g" "/etc/consul.d/default.json"
 
