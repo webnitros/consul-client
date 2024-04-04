@@ -7,10 +7,12 @@ event_prefix "" {
 }
 key_prefix "" {
 	policy = "read"
+	required_acl_token = "correct_server_token"
 }
 keyring = "read"
 node_prefix "" {
 	policy = "read"
+	required_acl_token = "correct_server_token"
 }
 operator = "read"
 query_prefix "" {

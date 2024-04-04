@@ -1,12 +1,69 @@
 #!/bin/sh
+#
 
-echo "Starting Consul... ${TYPE_SERVICE}"
+##############################################
+##############################################
+######### Export
+##############################################
+##############################################
 
+readFromSecret() {
+  # Поддерживает чтение пути из секретов Docker, имя файла
+  # относительно позиции /run/secrets/.
+  local sp="$1"
+  if [ -f "/run/secrets/$sp" ]; then
+    sp="/run/secrets/$sp"
+  fi
+  if [ -f "$sp" ]; then
+    credBuf=$(cat "$sp")
+    echo "$credBuf" | awk '{$1=$1;print}' # Удаляем пробельные символы по краям строки
+  fi
+}
+
+export_env_variables() {
+  if [ -f "$1" ]; then
+    while IFS='=' read -r key value; do
+      # Игнорируем строки, начинающиеся с #
+      if [[ "$key" =~ ^#.* ]]; then
+        continue
+      fi
+      # Удаляем пробельные символы из значения переменной
+      value=$(echo "$value" | awk '{$1=$1;print}')
+      export "$key"="$value"
+    done <"$1"
+  else
+    echo "Файл $1 не существует или не доступен для чтения."
+  fi
+}
+
+# CONSUL_CONFIG_FILE is not empty
+if [ -n "${CONSUL_CONFIG_FILE}" ]; then
+
+  # and if file exists
+  # Пример использования:
+  secret_value=$(readFromSecret "${CONSUL_CONFIG_FILE}")
+
+  if [ -n "$secret_value" ]; then
+    source <(echo "$secret_value")
+    #echo "Значение секрета: $secret_value"
+  else
+    echo "Секрет не найден или не удалось прочитать его."
+  fi
+
+fi
+
+##############################################
+##############################################
+##############################################
+##############################################
 if [ -z "${TYPE_SERVICE}" ]; then
   TYPE_SERVICE="agent"
 fi
 
-# CONSUL_HTTP_TOKEN_FILE not empty
+echo "Starting Consul... ${TYPE_SERVICE}"
+echo "AGENT_ADVERTISE_ADDR... ${AGENT_ADVERTISE_ADDR}"
+
+
 if [ -n "${CONSUL_HTTP_TOKEN_FILE}" ]; then
   if [ -f "${CONSUL_HTTP_TOKEN_FILE}" ]; then
     CONSUL_HTTP_TOKEN=$(cat ${CONSUL_HTTP_TOKEN_FILE})
@@ -22,16 +79,11 @@ else
   fi
 fi
 
-
 echo "TYPE_SERVICE: ${TYPE_SERVICE}"
 
+mkdir -p /etc/consul.d/
 
-if [ "${TYPE_SERVICE}" = "server" ]; then
-  cp /etc/consul.d/default.server.template /etc/consul.d/default.json
-elif [ "${TYPE_SERVICE}" = "agent" ]; then
-  cp /etc/consul.d/default.agent.template /etc/consul.d/default.json
-fi
-
+cp /template/${TYPE_SERVICE}/consul.json /etc/consul.d/default.json
 
 sed -i "s/%%CONSUL_HTTP_TOKEN%%/${CONSUL_HTTP_TOKEN}/g" "/etc/consul.d/default.json"
 
@@ -59,6 +111,9 @@ if [ "${TYPE_SERVICE}" = "server" ]; then
 
   consul agent --config-file /etc/consul.d/default.json
 elif [ "${TYPE_SERVICE}" = "agent" ]; then
+
+
+  echo "JOIN_SERVER_IP... ${JOIN_SERVER_IP}"
 
   # if empty AGENT_NODE_NAME
   if [ -z "${AGENT_NODE_NAME}" ]; then

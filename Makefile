@@ -13,7 +13,8 @@ stop:
 down:
 	docker compose down --volumes --remove-orphans
 build:
-	docker compose build
+	#docker compose build
+	docker build -t webnitros/consul:latest .
 destroy:
 	docker compose down --volumes --remove-orphans
 destroy-all:
@@ -21,3 +22,6 @@ destroy-all:
 install:
 	@make build
 	@make up
+remake:
+	@make down
+	@make install

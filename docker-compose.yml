@@ -3,58 +3,41 @@ version: '3.9'
 services:
     # Consul
     consul:
-        image: consul:1.15.4
+        image: webnitros/consul:latest
         ports:
-            - 8301:8301
-            - 8302:8302
-            - 8300:8300
-            - 8500:8500
-            - 8600:53/udp
-        command: [ "sh", "/entry.sh" ]
+            - "9300:9300"
+            - "9500:9500"
+            - "9600:9600/udp"
         environment:
-            TYPE_SERVICE: "${TYPE_SERVICE}"
-            CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
-
-            # Agent
-            JOIN_SERVER_IP: "${JOIN_SERVER_IP}"
-            AGENT_NODE_NAME: "${AGENT_NODE_NAME}"
-            AGENT_ADVERTISE_ADDR: "${AGENT_ADVERTISE_ADDR}"
-
-            # Server
-            BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
-            SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
-            SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
+            CONSUL_CONFIG_FILE: "env"
+            #TYPE_SERVICE: "${TYPE_SERVICE}"
+            #CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
+#
+            ## Agent
+            #JOIN_SERVER_IP: "${JOIN_SERVER_IP}"
+            #AGENT_NODE_NAME: "${AGENT_NODE_NAME}"
+            #AGENT_ADVERTISE_ADDR: "${AGENT_ADVERTISE_ADDR}"
+#
+            ## Server
+            #BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
+            #SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
+            #SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
         volumes:
-            - consul_data:/consul/data
-            - consul_config:/consul/config
+            - consul_server1_data:/consul/data
+            - consul_server1_config:/consul/config
         networks:
             - consul
         healthcheck:
-            test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/agent/checks" ]
+            test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
             interval: 30s
             timeout: 10s
             retries: 5
             start_period: 60s
-        configs:
-            -   source: entry
-                target: /entry.sh
-            # Config agent
-            -   source: agent_config
-                target: /etc/consul.d/default.agent.template
-            # Config server
-            -   source: server_config
-                target: /etc/consul.d/default.server.template
-
-            -   source: agent-policy
-                target: /etc/consul.d/agent-policy.hcl
-
-            -   source: anonynous_config
-                target: /etc/consul.d/anonymous-policy.hcl
 
     # Registrator
     registrator:
         image: gliderlabs/registrator:master
-        command: -internal consul://consul:8500
+        command: -internal consul://consul:9500
         restart: always
         environment:
             CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
@@ -64,33 +47,17 @@ services:
             - consul
         links:
             - consul
-        depends_on:
-            - consul
         #depends_on:
-        #    consul:
-        #        condition: service_healthy
+        #    - consul
+        depends_on:
+            consul:
+                condition: service_healthy
 
 volumes:
-    consul_data:
-    consul_config:
+    consul_server1_data:
+    consul_server1_config:
 
 networks:
     consul:
         external: false
-
-configs:
-    entry:
-        file: ./bin/entry.sh
-
-    # Config agent
-    agent_config:
-        file: ./agent/default.json
-    # Config server
-    server_config:
-        file: ./server/default.json
-    agent-policy:
-        file: ./server/agent-policy.hcl
-    anonynous_config:
-        file: ./server/anonymous-policy.hcl
-
 

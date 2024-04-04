@@ -4,6 +4,10 @@
 
 ```shell
 cp -f .env.example .env
+
+
+docker build -t webnitros/consul:latest .
+
 ```
 
 # Переменные окружения
