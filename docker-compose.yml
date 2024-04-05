@@ -1,63 +1,48 @@
 version: '3.9'
 
 services:
-    # Consul
     consul:
-        image: webnitros/consul:latest
-        ports:
-            - "9300:9300"
-            - "9500:9500"
-            - "9600:9600/udp"
-        environment:
-            CONSUL_CONFIG_FILE: "env"
-            #TYPE_SERVICE: "${TYPE_SERVICE}"
-            #CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
-#
-            ## Agent
-            #JOIN_SERVER_IP: "${JOIN_SERVER_IP}"
-            #AGENT_NODE_NAME: "${AGENT_NODE_NAME}"
-            #AGENT_ADVERTISE_ADDR: "${AGENT_ADVERTISE_ADDR}"
-#
-            ## Server
-            #BOOTSTRAP_EXPECT: "${BOOTSTRAP_EXPECT}"
-            #SERVER_NODE_NAME: "${SERVER_NODE_NAME}"
-            #SERVER_ADVERTISE_ADDR: "${SERVER_ADVERTISE_ADDR}"
+        image: consul:1.15.4
+        command: >-
+            agent
+            -retry-join=159.253.18.155
+            -config-file=/config.json
         volumes:
-            - consul_server1_data:/consul/data
-            - consul_server1_config:/consul/config
+            - ./config/consul.json:/config.json
         networks:
             - consul
+        #environment:
+        #    CONSUL_HTTP_TOKEN : "335fa89b-003d-9712-9fa0-e129f642d581"
+        ports:
+            - "9300:9300"
+            - "9301:9301"
+            - "9301:9301/udp"
+            - "9302:9302"
+            - "9302:9302/udp"
+            #- "9500:9500"
+            #- "9600:9600/udp"
         healthcheck:
             test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
             interval: 30s
             timeout: 10s
             retries: 5
             start_period: 60s
-
-    # Registrator
     registrator:
         image: gliderlabs/registrator:master
         command: -internal consul://consul:9500
         restart: always
         environment:
-            CONSUL_HTTP_TOKEN: "${CONSUL_HTTP_TOKEN}"
+            CONSUL_HTTP_TOKEN: "335fa89b-003d-9712-9fa0-e129f642d581"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
         networks:
             - consul
         links:
             - consul
-        #depends_on:
-        #    - consul
         depends_on:
             consul:
                 condition: service_healthy
 
-volumes:
-    consul_server1_data:
-    consul_server1_config:
-
 networks:
     consul:
         external: false
-

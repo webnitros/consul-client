@@ -1,16 +1,24 @@
 {
-  "datacenter": "dc-example",
-  "data_dir": "/consul/data",
-  "log_level": "DEBUG",
-  "node_name": "dc-master",
-  "server": true,
-  "bootstrap_expect": 1,
+  "node_name": "dec-1",
+  "datacenter": "dc-test",
+  "primary_datacenter": "dc-test",
+  "data_dir": "/tmp/data",
+  "server": false,
+  "ui_config": {
+    "enabled": false
+  },
+  "enable_script_checks": true,
+  "acl": {
+    "enabled": true,
+    "default_policy": "deny",
+    "tokens": {
+      "agent": "335fa89b-003d-9712-9fa0-e129f642d581"
+    }
+  },
+  "log_level": "INFO",
+  "domain": "consul",
   "client_addr": "0.0.0.0",
-  "ui" : true,
-  "acl_datacenter": "dc-example",
-  "acl_master_token": "CONSUL_MASTER_TOKEN",
-  "acl_default_policy": "deny",
-  "acl_down_policy": "extend-cache",
+  "advertise_addr": "5.101.181.43",
   "ports": {
     "dns": 9600,
     "http": 9500,

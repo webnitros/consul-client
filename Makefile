@@ -1,11 +1,3 @@
-include ./.env
-export
-
-export TYPE_SERVICE=$(filter-out $@,$(MAKECMDGOALS))
-
-test:
-	@echo "Service: $(TYPE_SERVICE)"
-
 up:
 	docker compose up
 stop:
@@ -23,5 +15,5 @@ install:
 	@make build
 	@make up
 remake:
-	@make down
-	@make install
+	@make destroy
+	@make up
