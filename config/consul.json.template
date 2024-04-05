@@ -12,13 +12,13 @@
     "enabled": true,
     "default_policy": "deny",
     "tokens": {
-      "agent": "31947772-0f0d-9cd1-36ef-66562261b105"
+      "agent": "YOUR_CONSUL_AGENT_TOKEN"
     }
   },
-  "log_level": "INFO",
+  "log_level": "ERR",
   "domain": "consul",
   "client_addr": "0.0.0.0",
-  "advertise_addr": "5.101.181.43",
+  "advertise_addr": "YOUR_NODE_IP",
   "ports": {
     "dns": 9600,
     "http": 9500,
@@ -26,5 +26,8 @@
     "serf_lan": 9301,
     "serf_wan": 9302,
     "server": 9300
-  }
+  },
+  "retry_join": [
+      "YOUR_CONSUL_SERVER"
+  ]
 }

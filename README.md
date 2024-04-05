@@ -1,23 +1,18 @@
 # Consul and Registrator with ACL server and agent
 
-Для соединения сервера и агента используется механизм авторизации acl.
-
-```shell
-cp -f .env.example .env
-
-
-docker build -t webnitros/consul:latest .
-
+```console
+cp config/consul.json.template config/consul.json
 ```
 
-# Переменные окружения
+**Configure**
 
-| Переменная            | Описание                                    | Пример                                                                                                      |
-|-----------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| CONSUL_HTTP_TOKEN     | Токен для доступа к Consul API              | [генератор](https://generate-random.org/api-token-generator?count=1&length=64&type=upper-letters&prefix=  ) |
-| JOIN_SERVER_IP        | IP-адрес сервера, который для присоединения |                                                                                                             |
-| SERVER_NODE_NAME      | Имя сервера                                 | consul-server-1                                                                                             |
-| SERVER_ADVERTISE_ADDR | IP-адрес сервера                            |                                                                                                             |
-| AGENT_NODE_NAME       | Имя агента                                  | consul-agent-1                                                                                              |
-| AGENT_ADVERTISE_ADDR  | IP-адрес агента                             |                                                                                                             |
-| BOOTSTRAP_EXPECT      | Количество серверов для выбора лидера       | 3                                                                                                           |
+Replace the `YOUR_CONSUL_AGENT_TOKEN` and `YOUR_NODE_IP`, and `ADD_NODE_IP` in the [config/consul.json](config/consul.json) file.
+
+Set token `CONSUL_HTTP_TOKEN` or secret file `CONSUL_HTTP_TOKEN_FILE` in the [docker-compose.yml](docker-compose.yml) file.
+
+## Docker swarm deploy
+
+```shell
+docker stack deploy -c docker-compose.yml consul-agent
+docker stack rm consul-agent
+```

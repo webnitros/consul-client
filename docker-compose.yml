@@ -5,10 +5,10 @@ services:
         image: consul:1.15.4
         command: >-
             agent
-            -retry-join=159.253.18.155
-            -config-file=/config.json
-        volumes:
-            - ./config/consul.json:/config.json
+            -config-file=/run/secrets/consul.json
+        secrets:
+            -   source: CONSUL_CONFIG
+                target: /run/secrets/consul.json
         networks:
             - consul
         ports:
@@ -17,6 +17,8 @@ services:
             - "9301:9301/udp"
             - "9302:9302"
             - "9302:9302/udp"
+            #- "9500:9500"
+            #- "9600:9600/udp"
         healthcheck:
             test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
             interval: 30s
@@ -24,13 +26,17 @@ services:
             retries: 5
             start_period: 60s
     registrator:
-        image: gliderlabs/registrator:master
+        image: webnitros/registrator:latest
         command: -internal consul://consul:9500
         restart: always
         environment:
-            CONSUL_HTTP_TOKEN: "31947772-0f0d-9cd1-36ef-66562261b105"
+            # CONSUL_HTTP_TOKEN: "YourConsulToken"
+            CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_AGENT_TOKEN"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
+        secrets:
+            -   source: CONSUL_AGENT_TOKEN
+                target: /run/secrets/CONSUL_AGENT_TOKEN
         networks:
             - consul
         links:
@@ -42,3 +48,11 @@ services:
 networks:
     consul:
         external: false
+
+secrets:
+    CONSUL_CONFIG:
+        #external: true
+        file: ./config/consul.json
+    CONSUL_AGENT_TOKEN:
+        #external: true
+        file: ./consul.token

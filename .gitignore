@@ -1,3 +1,4 @@
 .idea
 .env
 temp
+/config/consul.json
