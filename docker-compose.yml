@@ -32,7 +32,7 @@ services:
         command: -internal consul://consul:9500
         restart: always
         environment:
-            CONSUL_HTTP_TOKEN: "335fa89b-003d-9712-9fa0-e129f642d581"
+            CONSUL_HTTP_TOKEN: "31947772-0f0d-9cd1-36ef-66562261b105"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
         networks:
