@@ -11,16 +11,12 @@ services:
             - ./config/consul.json:/config.json
         networks:
             - consul
-        #environment:
-        #    CONSUL_HTTP_TOKEN : "335fa89b-003d-9712-9fa0-e129f642d581"
         ports:
             - "9300:9300"
             - "9301:9301"
             - "9301:9301/udp"
             - "9302:9302"
             - "9302:9302/udp"
-            #- "9500:9500"
-            #- "9600:9600/udp"
         healthcheck:
             test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
             interval: 30s
