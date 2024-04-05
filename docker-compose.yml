@@ -19,6 +19,12 @@ services:
             - "9302:9302/udp"
             #- "9500:9500"
             #- "9600:9600/udp"
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 2
+                delay: 15s
+                order: start-first
         healthcheck:
             test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
             interval: 30s
@@ -42,8 +48,16 @@ services:
         links:
             - consul
         depends_on:
-            consul:
-                condition: service_healthy
+            - consul
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 2
+                delay: 15s
+                order: start-first
+        #depends_on:
+        #    consul:
+        #        condition: service_healthy
 
 networks:
     consul:
@@ -51,8 +65,8 @@ networks:
 
 secrets:
     CONSUL_CONFIG:
-        #external: true
-        file: ./config/consul.json
+        external: true # swarm
+        #file: ./config/consul.json
     CONSUL_AGENT_TOKEN:
-        #external: true
-        file: ./consul.token
+        external: true # swarm
+        #file: ./consul.token

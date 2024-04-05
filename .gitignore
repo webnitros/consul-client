@@ -2,3 +2,4 @@
 .env
 temp
 /config/consul.json
+/consul.token
