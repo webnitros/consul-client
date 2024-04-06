@@ -5,8 +5,6 @@ services:
         image: webnitros/consul-client:latest
         command: >-
             agent
-            -advertise=${HOST_IP:-127.0.0.1}
-            -node=${NODE_NAME:-clientConsul}
             -config-file=/mnt/data/consul.json
         secrets:
             - CONSUL_AGENT_TOKEN

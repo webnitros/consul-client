@@ -38,7 +38,7 @@ Name: `agent-policy-key-read`
 Create token with policy `agent-policy-key-read` and set the token in the secret
 
 ```console
-echo -n "YourToken" | docker secret create CONSUL_AGENT_TOKEN -
+echo -n "0a78722d-01d2-02ff-c995-58e570e08279" | docker secret create CONSUL_AGENT_TOKEN -
 **if exist secret, stop stack and `docker secret rm CONSUL_AGENT_TOKEN` **
 ```
 
