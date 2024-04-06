@@ -1,5 +1,4 @@
 {
-  "node_name": "dec-1",
   "datacenter": "dc-test",
   "primary_datacenter": "dc-test",
   "data_dir": "/tmp/data",
@@ -12,13 +11,12 @@
     "enabled": true,
     "default_policy": "deny",
     "tokens": {
-      "agent": "YOUR_CONSUL_AGENT_TOKEN"
+      "agent": "%%СONSUL_AGENT_TOKEN%%"
     }
   },
   "log_level": "ERR",
   "domain": "consul",
   "client_addr": "0.0.0.0",
-  "advertise_addr": "YOUR_NODE_IP",
   "ports": {
     "dns": 9600,
     "http": 9500,

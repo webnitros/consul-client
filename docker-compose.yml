@@ -2,13 +2,19 @@ version: '3.9'
 
 services:
     consul:
-        image: consul:1.15.4
+        image: webnitros/consul-client:latest
         command: >-
             agent
-            -config-file=/run/secrets/consul.json
+            -advertise=${HOST_IP:-127.0.0.1}
+            -node=${NODE_NAME:-clientConsul}
+            -config-file=/mnt/data/consul.json
         secrets:
-            -   source: CONSUL_CONFIG
-                target: /run/secrets/consul.json
+            -   source: CONSUL_AGENT_TOKEN
+                target: /run/secrets/CONSUL_AGENT_TOKEN
+        environment:
+            CONSUL_KV: "${CONSUL_KV:-on}"
+            CONSUL_KV_URL: "${CONSUL_KV_URL:-http://127.0.0.0:8500/v1/kv/consul/nodes/config}"
+            CONSUL_KV_TOKEN_FILE: "${CONSUL_KV_TOKEN_FILE:-/run/secrets/CONSUL_AGENT_TOKEN }"
         networks:
             - consul
         ports:
@@ -36,7 +42,6 @@ services:
         command: -internal consul://consul:9500
         restart: always
         environment:
-            # CONSUL_HTTP_TOKEN: "YourConsulToken"
             CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_AGENT_TOKEN"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
@@ -65,8 +70,8 @@ networks:
 
 secrets:
     CONSUL_CONFIG:
-        external: true # swarm
-        #file: ./config/consul.json
+        #external: true # swarm
+        file: ./config/consul.json
     CONSUL_AGENT_TOKEN:
-        external: true # swarm
-        #file: ./consul.token
+        #external: true # swarm
+        file: ./consul.token

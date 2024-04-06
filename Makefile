@@ -1,3 +1,9 @@
+build:
+	docker build -t webnitros/consul-client:latest .
+push:
+	docker login
+	docker buildx create --use
+	docker buildx build --platform linux/arm64,linux/amd64 -t webnitros/consul-client:latest --push .
 up:
 	docker compose up
 stop:
