@@ -9,8 +9,7 @@ services:
             -node=${NODE_NAME:-clientConsul}
             -config-file=/mnt/data/consul.json
         secrets:
-            -   source: CONSUL_AGENT_TOKEN
-                target: /run/secrets/CONSUL_AGENT_TOKEN
+            - CONSUL_AGENT_TOKEN
         environment:
             CONSUL_KV: "${CONSUL_KV:-on}"
             CONSUL_KV_URL: "${CONSUL_KV_URL:-http://127.0.0.0:8500/v1/kv/consul/nodes/config}"
@@ -46,8 +45,7 @@ services:
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
         secrets:
-            -   source: CONSUL_AGENT_TOKEN
-                target: /run/secrets/CONSUL_AGENT_TOKEN
+            - CONSUL_AGENT_TOKEN
         networks:
             - consul
         links:
