@@ -69,9 +69,9 @@ networks:
         external: false
 
 secrets:
-    CONSUL_CONFIG:
-        #external: true # swarm
-        file: ./config/consul.json
+    #CONSUL_CONFIG:
+    #    external: true # swarm
+    #    #file: ./config/consul.json
     CONSUL_AGENT_TOKEN:
-        #external: true # swarm
-        file: ./consul.token
+        external: true # swarm
+        #file: ./consul.token
