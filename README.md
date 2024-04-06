@@ -4,47 +4,46 @@ Docker image for the Consul client that receives settings from Consul KV
 
 **Configure**
 
-| Variable             | Description          | Example                                         |
-|----------------------|----------------------|-------------------------------------------------|
-| CONSUL_KV            | Enable consul kv     | (on\off)                                        |
-| CONSUL_KV_URL        | Consul kv url        | http://127.0.0.0:8500/v1/kv/consul/nodes/config |
-| CONSUL_KV_TOKEN      | Consul kv token      | 20043832-4307-4BF5-8848-F728172085B8            |
-| CONSUL_KV_TOKEN_FILE | Consul kv token file | /run/secrets/CONSUL_AGENT_TOKEN                 |
+| Secret          | Description     | Example                                         |
+|-----------------|-----------------|-------------------------------------------------|
+| CONSUL_KV_URL   | Consul kv url   | http://127.0.0.0:8500/v1/kv/consul/nodes/config |
+| CONSUL_KV_TOKEN | Consul kv token | 2d433aa1-b982-7ce6-b902-911d42c784ec            |
 
-## Create the secret /run/secrets/CONSUL_AGENT_TOKEN
+# Dev
 
-#### Create policy Consul
-
-Name: `agent-policy-key-read`
+Create secret for dev file
 
 ```console
-{
-  "key_prefix": {
-    "consul/nodes/config": {
-      "policy": "read"
-    }
-  },
-  "service_prefix": {
-    "": {
-      "policy": "write",
-      "intentions": "read"
-    }
-  }
-}
+uuidgen > consul.token
+echo -n "http://127.0.0.0:8500/v1/kv/consul/nodes/config" > consul.url
 ```
 
-#### Create token
+######
 
-Create token with policy `agent-policy-key-read` and set the token in the secret
+the [docker-compose.yml](docker-compose.yml) file
 
 ```console
-echo -n "YorToken" | docker secret create CONSUL_AGENT_TOKEN -
-**if exist secret, stop stack and `docker secret rm CONSUL_AGENT_TOKEN` **
+secrets:
+    CONSUL_KV_URL:
+        file: ./consul.url
+    CONSUL_KV_TOKEN:
+        file: ./consul.token
 ```
 
-##### Create the config
+# Prod
 
-Create the config in the Consul KV
+Create secret
+
+```console
+echo -n "YOUR_TOKEN" | docker secret create CONSUL_KV_TOKEN -
+echo -n "http://127.0.0.0:8500/v1/kv/consul/nodes/config" | docker secret create CONSUL_KV_URL -
+```
+
+**if exist secret, stop stack and `docker secret rm CONSUL_KV_URL` **
+
+##### Config client consul
+
+Config that should be stored in http://127.0.0.0:8500/v1/kv/consul/nodes/config
 
 ```console
 {
@@ -58,7 +57,7 @@ Create the config in the Consul KV
     "enabled": true,
     "default_policy": "deny",
     "tokens": {
-      "agent": "%%СONSUL_AGENT_TOKEN%%"
+      "agent": "YOUR_TOKEN",
     }
   },
   "log_level": "INFO",
@@ -77,7 +76,3 @@ Create the config in the Consul KV
   ]
 }
 ```
-
-
-
-

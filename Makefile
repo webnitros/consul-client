@@ -19,5 +19,5 @@ install:
 	@make build
 	@make up
 remake:
-	@make destroy
+	@make install
 	@make up

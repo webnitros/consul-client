@@ -3,3 +3,4 @@
 temp
 /config/consul.json
 /consul.token
+/consul.url

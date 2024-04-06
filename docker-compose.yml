@@ -7,11 +7,8 @@ services:
             agent
             -config-file=/mnt/data/consul.json
         secrets:
-            - CONSUL_AGENT_TOKEN
-        environment:
-            CONSUL_KV: "${CONSUL_KV:-on}"
-            CONSUL_KV_URL: "${CONSUL_KV_URL:-http://127.0.0.0:8500/v1/kv/consul/nodes/config}"
-            CONSUL_KV_TOKEN_FILE: "${CONSUL_KV_TOKEN_FILE:-/run/secrets/CONSUL_AGENT_TOKEN }"
+            - CONSUL_KV_TOKEN
+            - CONSUL_KV_URL
         networks:
             - consul
         ports:
@@ -39,11 +36,11 @@ services:
         command: -internal consul://consul:9500
         restart: always
         environment:
-            CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_AGENT_TOKEN"
+            CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_KV_TOKEN"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock
         secrets:
-            - CONSUL_AGENT_TOKEN
+            - CONSUL_KV_TOKEN
         networks:
             - consul
         links:
@@ -65,9 +62,9 @@ networks:
         external: false
 
 secrets:
-    #CONSUL_CONFIG:
-    #    external: true # swarm
-    #    #file: ./config/consul.json
-    CONSUL_AGENT_TOKEN:
+    CONSUL_KV_URL:
+        external: true # swarm
+        #file: ./consul.url
+    CONSUL_KV_TOKEN:
         external: true # swarm
         #file: ./consul.token
