@@ -57,7 +57,7 @@ Config that should be stored in http://127.0.0.0:8500/v1/kv/consul/nodes/config
     "enabled": true,
     "default_policy": "deny",
     "tokens": {
-      "agent": "YOUR_TOKEN",
+      "agent": "YOUR_TOKEN"
     }
   },
   "log_level": "INFO",
