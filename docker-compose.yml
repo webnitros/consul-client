@@ -41,7 +41,12 @@ services:
       - consul
     depends_on:
       - consul
-
+    logging: # Добавляем опцию logging
+      driver: "json-file"          # Используем json-file драйвер
+      options:
+        max-size: "10m"            # Ограничиваем размер лог-файла
+        max-file: "3"              # Ограничиваем количество лог-файлов
+        labels: "error"            # Только ошибки будут писаться в лог
 
 networks:
   consul:
