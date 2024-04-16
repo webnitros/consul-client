@@ -21,3 +21,14 @@ install:
 remake:
 	@make install
 	@make up
+
+
+# consul
+consul-deploy:
+	docker stack deploy --compose-file=docker-compose.yml --detach=false consul
+consul-rm:
+	docker stack rm consul
+consul-remake:
+	@make consul-rm
+	sleep 5
+	@make consul-deploy
