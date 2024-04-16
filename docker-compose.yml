@@ -1,70 +1,54 @@
 version: '3.9'
 
 services:
-    consul:
-        image: webnitros/consul-client:latest
-        command: >-
-            agent
-            -config-file=/mnt/data/consul.json
-        secrets:
-            - CONSUL_KV_TOKEN
-            - CONSUL_KV_URL
-        networks:
-            - consul
-        ports:
-            - "9300:9300"
-            - "9301:9301"
-            - "9301:9301/udp"
-            - "9302:9302"
-            - "9302:9302/udp"
-            #- "9500:9500"
-            #- "9600:9600/udp"
-        deploy:
-            replicas: 1
-            update_config:
-                parallelism: 2
-                delay: 15s
-                order: start-first
-        healthcheck:
-            test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
-            interval: 30s
-            timeout: 10s
-            retries: 5
-            start_period: 60s
-    registrator:
-        image: webnitros/registrator:latest
-        command: -internal consul://consul:9500
-        restart: always
-        environment:
-            CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_KV_TOKEN"
-        volumes:
-            - /var/run/docker.sock:/tmp/docker.sock
-        secrets:
-            - CONSUL_KV_TOKEN
-        networks:
-            - consul
-        links:
-            - consul
-        depends_on:
-            - consul
-        deploy:
-            replicas: 1
-            update_config:
-                parallelism: 2
-                delay: 15s
-                order: start-first
-        #depends_on:
-        #    consul:
-        #        condition: service_healthy
+  consul:
+    image: webnitros/consul-client:latest
+    command: >-
+      agent
+      -config-file=/mnt/data/consul.json
+    secrets:
+      - CONSUL_KV_TOKEN
+      - CONSUL_KV_URL
+    networks:
+      - consul
+    ports:
+      - "9300:9300"
+      - "9301:9301"
+      - "9301:9301/udp"
+      - "9302:9302"
+      - "9302:9302/udp"
+      #- "9500:9500"
+      #- "9600:9600/udp"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9500/v1/agent/checks" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+  registrator:
+    image: webnitros/registrator:latest
+    command: -internal consul://consul:9500
+    restart: always
+    environment:
+      CONSUL_HTTP_TOKEN_FILE: "/run/secrets/CONSUL_KV_TOKEN"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    secrets:
+      - CONSUL_KV_TOKEN
+    networks:
+      - consul
+    links:
+      - consul
+    depends_on:
+      - consul
+
 
 networks:
-    consul:
-        external: false
+  consul:
+    external: false
 
 secrets:
-    CONSUL_KV_URL:
-        external: true # swarm
-        #file: ./consul.url
-    CONSUL_KV_TOKEN:
-        external: true # swarm
-        #file: ./consul.token
+  CONSUL_KV_URL:
+    file: ./consul.url
+  CONSUL_KV_TOKEN:
+    file: ./consul.token

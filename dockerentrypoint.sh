@@ -24,8 +24,8 @@ fi
 CONSUL_KV_TOKEN=$(cat $CONSUL_KV_TOKEN_FILE)
 CONSUL_KV_URL=$(cat $CONSUL_KV_URL_FILE)
 
-echo "CONSUL_KV_TOKEN: $CONSUL_KV_TOKEN"
-echo "CONSUL_KV_URL: $CONSUL_KV_URL"
+#echo "CONSUL_KV_TOKEN: $CONSUL_KV_TOKEN"
+#echo "CONSUL_KV_URL: $CONSUL_KV_URL"
 
 if [ -z "$CONSUL_KV_TOKEN" ]; then
   echo "Ошибка: Не задан токен для доступа к Consul."

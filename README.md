@@ -2,19 +2,11 @@
 
 Docker image for the Consul client that receives settings from Consul KV
 
-**Configure**
-
-| Secret          | Description     | Example                                         |
-|-----------------|-----------------|-------------------------------------------------|
-| CONSUL_KV_URL   | Consul kv url   | http://127.0.0.0:8500/v1/kv/consul/nodes/config |
-| CONSUL_KV_TOKEN | Consul kv token | 2d433aa1-b982-7ce6-b902-911d42c784ec            |
-
-# Dev
-
 Create secret for dev file
 
 ```console
 uuidgen > consul.token
+# configuration
 echo -n "http://127.0.0.0:8500/v1/kv/consul/nodes/config" > consul.url
 ```
 
@@ -32,14 +24,7 @@ secrets:
 
 # Prod
 
-Create secret
-
-```console
-echo -n "YOUR_TOKEN" | docker secret create CONSUL_KV_TOKEN -
-echo -n "http://127.0.0.0:8500/v1/kv/consul/nodes/config" | docker secret create CONSUL_KV_URL -
-```
-
-**if exist secret, stop stack and `docker secret rm CONSUL_KV_URL` **
+**if exist secret, stop stack and `docker secret rm CONSUL_KV_TOKEN` **
 
 ##### Config client consul
 
@@ -47,6 +32,7 @@ Config that should be stored in http://127.0.0.0:8500/v1/kv/consul/nodes/config
 
 ```console
 {
+  "node_name": "node-1",
   "datacenter": "dc-test",
   "primary_datacenter": "dc-test",
   "data_dir": "/tmp/data",
@@ -63,6 +49,7 @@ Config that should be stored in http://127.0.0.0:8500/v1/kv/consul/nodes/config
   "log_level": "INFO",
   "domain": "consul",
   "client_addr": "0.0.0.0",
+  "advertise_addr": "YOUR_IP",
   "ports": {
     "dns": 9600,
     "http": 9500,
